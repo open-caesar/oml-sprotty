@@ -1,1 +1,1 @@
-# oml-sprotty
+# OML Sprotty
