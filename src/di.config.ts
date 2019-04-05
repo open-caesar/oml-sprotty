@@ -7,7 +7,7 @@
 import { Container, ContainerModule } from "inversify";
 import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
         HtmlRootView, LogLevel, PolylineEdgeView, PreRenderedElement,
-        PreRenderedView, SCompartment, SCompartmentView, SEdge, SGraph,
+        PreRenderedView, SCompartment, SCompartmentView, SGraph,
         SGraphView, SLabel, SLabelView, TYPES, boundsModule,
         buttonModule, configureModelElement, defaultModule, expandModule,
         exportModule, fadeModule, hoverModule, modelSourceModule, moveModule,
@@ -17,7 +17,7 @@ import { popupModelFactory } from "./popup";
 import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView,
     CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
     ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView } from "./views";
-import { ModuleNode, Tag, OmlLabel, OmlNode } from "./oml-models";
+import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge } from "./oml-models";
 import { OmlModelFactory } from "./model-factory";
 
 const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
@@ -41,12 +41,12 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'label:tag', SLabel, SLabelView)
     configureModelElement(context, 'comp:comp', SCompartment, SCompartmentView)
     configureModelElement(context, 'comp:classHeader', SCompartment, HeaderCompartmentView)
-    configureModelElement(context, 'edge:straight', SEdge, PolylineEdgeView)
-    configureModelElement(context, 'edge:composition', SEdge, CompositionEdgeView)
-    configureModelElement(context, 'edge:dashed', SEdge, DashedEdgeView)
-    configureModelElement(context, 'edge:import', SEdge, ImportEdgeView)
-    configureModelElement(context, 'edge:uses', SEdge, DashedArrowEdgeView)
-    configureModelElement(context, 'edge:augments', SEdge, ArrowEdgeView)
+    configureModelElement(context, 'edge:straight', OmlEdge, PolylineEdgeView)
+    configureModelElement(context, 'edge:composition', OmlEdge, CompositionEdgeView)
+    configureModelElement(context, 'edge:dashed', OmlEdge, DashedEdgeView)
+    configureModelElement(context, 'edge:import', OmlEdge, ImportEdgeView)
+    configureModelElement(context, 'edge:uses', OmlEdge, DashedArrowEdgeView)
+    configureModelElement(context, 'edge:augments', OmlEdge, ArrowEdgeView)
     configureModelElement(context, 'html', HtmlRoot, HtmlRootView)
     configureModelElement(context, 'pre-rendered', PreRenderedElement, PreRenderedView)
     configureModelElement(context, ExpandButtonHandler.TYPE, SButton, ExpandButtonView)

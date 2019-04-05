@@ -10,14 +10,13 @@ import { svg } from 'snabbdom-jsx';
 
 import {
     RenderingContext,
-    SEdge,
     SCompartment,
     PolylineEdgeView,
     Point,
     toDegrees, IView, setAttr
 } from "sprotty/lib"
 import { VNode } from "snabbdom/vnode"
-import { OmlNode, ModuleNode, Tag } from "./oml-models"
+import { OmlNode, ModuleNode, OmlEdge, Tag } from "./oml-models"
 
 export class ClassNodeView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
@@ -118,7 +117,7 @@ export class NoteView implements IView {
 }
 
 export class CompositionEdgeView extends PolylineEdgeView {
-    protected renderAdditionals(edge: SEdge, segments: Point[], context: RenderingContext): VNode[] {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
         const p2 = segments[1]
         const r = 6
@@ -131,13 +130,13 @@ export class CompositionEdgeView extends PolylineEdgeView {
 
     static readonly SOURCE_CORRECTION = Math.sqrt(1 * 1 + 2 * 2)
 
-    protected getSourceAnchorCorrection(edge: SEdge): number {
+    protected getSourceAnchorCorrection(edge: OmlEdge): number {
         return CompositionEdgeView.SOURCE_CORRECTION
     }
 }
 
 export class DashedEdgeView extends PolylineEdgeView {
-    protected renderLine(edge: SEdge, segments: Point[], context: RenderingContext): VNode {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
         let path = `M ${firstPoint.x},${firstPoint.y}`
         for (let i = 1; i < segments.length; i++) {
@@ -149,7 +148,7 @@ export class DashedEdgeView extends PolylineEdgeView {
 }
 
 export class ImportEdgeView extends DashedEdgeView {
-    protected renderAdditionals(edge: SEdge, segments: Point[], context: RenderingContext): VNode[] {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
         const p2 = segments[1]
         return [
@@ -160,13 +159,13 @@ export class ImportEdgeView extends DashedEdgeView {
 
     static readonly SOURCE_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
-    protected getSourceAnchorCorrection(edge: SEdge): number {
+    protected getSourceAnchorCorrection(edge: OmlEdge): number {
         return CompositionEdgeView.SOURCE_CORRECTION
     }
 }
 
 export class ArrowEdgeView extends PolylineEdgeView {
-    protected renderAdditionals(edge: SEdge, segments: Point[], context: RenderingContext): VNode[] {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
@@ -177,13 +176,13 @@ export class ArrowEdgeView extends PolylineEdgeView {
 
     static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
-    protected getTargetAnchorCorrection(edge: SEdge): number {
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
         return ArrowEdgeView.TARGET_CORRECTION
     }
 }
 
 export class DashedArrowEdgeView extends DashedEdgeView {
-    protected renderAdditionals(edge: SEdge, segments: Point[], context: RenderingContext): VNode[] {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
@@ -194,7 +193,7 @@ export class DashedArrowEdgeView extends DashedEdgeView {
 
     static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
-    protected getTargetAnchorCorrection(edge: SEdge): number {
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
         return DashedArrowEdgeView.TARGET_CORRECTION
     }
 }

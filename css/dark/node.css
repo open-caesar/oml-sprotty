@@ -27,6 +27,11 @@
     font-size: 0.8em;
 }
 
+.sprotty-label.text {
+    font-size: 0.8em;
+    fill: #729A9A;
+}
+
 .sprotty-button {
     stroke-width: 0;
     fill: #ffffff;

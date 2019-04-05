@@ -7,8 +7,16 @@
 
 import {
     boundsFeature, fadeFeature, hoverFeedbackFeature, popupFeature, SCompartment, selectFeature, layoutContainerFeature,
-    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode
+    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode, SEdge
 } from "sprotty/lib"
+
+export class OmlEdge extends SEdge {
+    trace: String | undefined
+
+    hasFeature(feature: symbol) {
+        return super.hasFeature(feature) || feature === selectFeature || (feature === openFeature && this.trace !== undefined)
+    }
+}
 
 export class OmlNode extends RectangularNode {
     cssClass: string
