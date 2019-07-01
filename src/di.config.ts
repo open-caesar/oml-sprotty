@@ -6,7 +6,7 @@
  */
 import { Container, ContainerModule } from "inversify";
 import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
-        HtmlRootView, LogLevel, PolylineEdgeView, PreRenderedElement,
+        HtmlRootView, LogLevel, PreRenderedElement,
         PreRenderedView, SCompartment, SCompartmentView, SGraph,
         SGraphView, SLabel, SLabelView, TYPES, boundsModule,
         buttonModule, configureModelElement, defaultModule, expandModule,
@@ -14,7 +14,7 @@ import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
         openModule, overrideViewerOptions, selectModule, undoRedoModule,
         viewportModule, SButton } from 'sprotty/lib';
 import { popupModelFactory } from "./popup";
-import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView,
+import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView, StandardEdgeView,
     CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
     ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView } from "./views";
 import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge } from "./oml-models";
@@ -41,7 +41,7 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'label:tag', SLabel, SLabelView)
     configureModelElement(context, 'comp:comp', SCompartment, SCompartmentView)
     configureModelElement(context, 'comp:classHeader', SCompartment, HeaderCompartmentView)
-    configureModelElement(context, 'edge:straight', OmlEdge, PolylineEdgeView)
+    configureModelElement(context, 'edge:straight', OmlEdge, StandardEdgeView)
     configureModelElement(context, 'edge:composition', OmlEdge, CompositionEdgeView)
     configureModelElement(context, 'edge:dashed', OmlEdge, DashedEdgeView)
     configureModelElement(context, 'edge:import', OmlEdge, ImportEdgeView)

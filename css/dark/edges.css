@@ -15,8 +15,9 @@
     fill: #729A9A;
 }
 
-.sprotty-edge.dashed {
-    stroke-dasharray: 5 5;
+.sprotty-edge.specializes {
+    /* stroke-dasharray: 5 5; */
+    stroke: rgb(192, 190, 64);
 }
 
 

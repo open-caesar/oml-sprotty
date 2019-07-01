@@ -121,7 +121,7 @@ export class CompositionEdgeView extends PolylineEdgeView {
         const p1 = segments[0]
         const p2 = segments[1]
         const r = 6
-        const rhombStr = "M 0,0 l" + r + "," + (r / 2) + " l" + r + ",-" + (r / 2) + " l-" + r + ",-" + (r / 2) + " l-" + r + "," + (r / 2) + " Z"
+        const rhombStr = `M 0,0 l${r},${r / 2} l${r},-${r / 2} l-${r},-${r / 2} l-${r},${r / 2} Z`
         return [
             <path class-sprotty-edge={true} class-composition={true} d={rhombStr}
                   transform={`rotate(${angle(p1, p2)} ${p1.x} ${p1.y}) translate(${p1.x} ${p1.y})`}/>
@@ -135,15 +135,31 @@ export class CompositionEdgeView extends PolylineEdgeView {
     }
 }
 
+export class StandardEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y > firstPoint.y ? lastPoint.y - 10 : lastPoint.y + 10}`
+        return <path class-sprotty-edge={true} d={path}/>
+    }
+}
+
 export class DashedEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
         let path = `M ${firstPoint.x},${firstPoint.y}`
-        for (let i = 1; i < segments.length; i++) {
+        for (let i = 1; i < segments.length - 1; i++) {
             const p = segments[i]
             path += ` L ${p.x},${p.y}`
         }
-        return <path class-sprotty-edge={true} class-dashed={true} d={path}/>
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y > firstPoint.y ? lastPoint.y - 10 : lastPoint.y + 10}`
+        return <path class-sprotty-edge={true} class-specializes={true} d={path}/>
     }
 }
 
@@ -169,7 +185,7 @@ export class ArrowEdgeView extends PolylineEdgeView {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
-            <path class-sprotty-edge={true} d="M 10,-4 L 0,0 L 10,4"
+            <polygon class-sprotty-edge={true} points="10,-4 0,0 10,4"
                   transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
@@ -186,7 +202,7 @@ export class DashedArrowEdgeView extends DashedEdgeView {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
-            <path class-sprotty-edge={true} d="M 10,-4 L 0,0 L 10,4"
+            <polygon class-sprotty-edge={true} class-specializes={true} points="10,-4 0,0 10,4"
                   transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
