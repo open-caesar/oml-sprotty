@@ -13,7 +13,8 @@ import {
     SCompartment,
     PolylineEdgeView,
     Point,
-    toDegrees, IView, setAttr
+    toDegrees, IView, setAttr, SLabel,
+    getSubType
 } from "sprotty/lib"
 import { VNode } from "snabbdom/vnode"
 import { OmlNode, ModuleNode, OmlEdge, Tag } from "./oml-models"
@@ -143,8 +144,10 @@ export class StandardEdgeView extends PolylineEdgeView {
             const p = segments[i]
             path += ` L ${p.x},${p.y}`
         }
+        const secondLastPoint = segments[segments.length - 2];
         const lastPoint = segments[segments.length - 1];
-        path += ` L ${lastPoint.x}, ${lastPoint.y > firstPoint.y ? lastPoint.y - 10 : lastPoint.y + 10}`
+        const isDownArrow = lastPoint.y > secondLastPoint.y
+        path += ` L ${lastPoint.x}, ${isDownArrow ? lastPoint.y - 10 : lastPoint.y + 10}`
         return <path class-sprotty-edge={true} d={path}/>
     }
 }
@@ -180,7 +183,7 @@ export class ImportEdgeView extends DashedEdgeView {
     }
 }
 
-export class ArrowEdgeView extends PolylineEdgeView {
+export class ArrowEdgeView extends StandardEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
@@ -211,6 +214,16 @@ export class DashedArrowEdgeView extends DashedEdgeView {
 
     protected getTargetAnchorCorrection(edge: OmlEdge): number {
         return DashedArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+export class InvFunctionalView implements IView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
     }
 }
 
