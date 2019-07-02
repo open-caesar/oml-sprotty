@@ -16,7 +16,7 @@ import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
 import { popupModelFactory } from "./popup";
 import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView, /*StandardEdgeView,*/
     CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
-    ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView } from "./views";
+    ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView, CardinalLabelView } from "./views";
 import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge } from "./oml-models";
 import { OmlModelFactory } from "./model-factory";
 
@@ -35,6 +35,7 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'node:note', OmlNode, NoteView)
     configureModelElement(context, 'label:heading', SLabel, SLabelView)
     configureModelElement(context, 'label:text', SLabel, SLabelView)
+    configureModelElement(context, 'label:subtext', SLabel, CardinalLabelView)
     configureModelElement(context, 'ylabel:text', OmlLabel, SLabelView)
     configureModelElement(context, 'label:classHeader', SLabel, SLabelView)
     configureModelElement(context, 'tag', Tag, TagView)

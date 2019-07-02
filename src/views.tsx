@@ -14,7 +14,8 @@ import {
     PolylineEdgeView,
     Point,
     toDegrees, IView, setAttr, SLabel,
-    getSubType
+    getSubType,
+    SLabelView
 } from "sprotty/lib"
 import { VNode } from "snabbdom/vnode"
 import { OmlNode, ModuleNode, OmlEdge, Tag } from "./oml-models"
@@ -220,6 +221,16 @@ export class DashedArrowEdgeView extends DashedEdgeView {
 export class InvFunctionalView implements IView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         const vnode = <text class-sprotty-label={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+export class CardinalLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true} class-subtext={true}>{label.text}</text>;
         const subType = getSubType(label);
         if (subType)
             setAttr(vnode, 'class', subType);
