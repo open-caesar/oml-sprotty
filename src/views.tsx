@@ -230,6 +230,7 @@ export class InvFunctionalView implements IView {
 
 export class CardinalLabelView extends SLabelView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        console.log("LABEL:", label);
         const vnode = <text class-sprotty-label={true} class-subtext={true}>{label.text}</text>;
         const subType = getSubType(label);
         if (subType)

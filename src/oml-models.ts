@@ -50,6 +50,10 @@ export class OmlLabel extends SLabel {
     }
 }
 
+// export class OmlSubtext extends SLabel {
+//     edgePlacement: EdgePlacement = 0
+// }
+
 export class Tag extends SShapeElement {
     size = {
         width: 24,

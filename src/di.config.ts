@@ -13,7 +13,7 @@ import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
         exportModule, fadeModule, hoverModule, modelSourceModule, moveModule,
         openModule, overrideViewerOptions, selectModule, undoRedoModule,
         viewportModule, SButton, PolylineEdgeView } from 'sprotty/lib';
-import { popupModelFactory } from "./popup";
+// import { popupModelFactory } from "./popup";
 import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView, /*StandardEdgeView,*/
     CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
     ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView, CardinalLabelView } from "./views";
@@ -24,7 +24,7 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     rebind(TYPES.ILogger).to(ConsoleLogger).inSingletonScope()
     rebind(TYPES.LogLevel).toConstantValue(LogLevel.warn)
     rebind(TYPES.IModelFactory).to(OmlModelFactory).inSingletonScope()
-    bind(TYPES.PopupModelFactory).toConstantValue(popupModelFactory)
+    // bind(TYPES.PopupModelFactory).toConstantValue(popupModelFactory)
     const context = { bind, unbind, isBound, rebind };
     configureModelElement(context, 'graph', SGraph, SGraphView);
     configureModelElement(context, 'node:class', OmlNode, ClassNodeView)
