@@ -7,7 +7,7 @@
 
 /** @jsx svg */
 import { svg } from 'snabbdom-jsx';
-
+import { injectable } from "inversify";
 import {
     RenderingContext,
     SCompartment,
@@ -16,10 +16,11 @@ import {
     toDegrees, IView, setAttr, SLabel,
     getSubType,
     SLabelView
-} from "sprotty/lib"
+} from "sprotty"
 import { VNode } from "snabbdom/vnode"
 import { OmlNode, ModuleNode, OmlEdge, Tag } from "./oml-models"
 
+@injectable()
 export class ClassNodeView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node={true}>
@@ -33,6 +34,7 @@ export class ClassNodeView implements IView {
     }
 }
 
+@injectable()
 export class HeaderCompartmentView implements IView {
     render(model: SCompartment, context: RenderingContext): VNode {
         const translate = `translate(${model.bounds.x}, ${model.bounds.y})`
@@ -47,6 +49,7 @@ export class HeaderCompartmentView implements IView {
     }
 }
 
+@injectable()
 export class TagView implements IView {
     render(element: Tag, context: RenderingContext): VNode {
         const radius = 0.5 * element.size.width
@@ -57,6 +60,7 @@ export class TagView implements IView {
     }
 }
 
+@injectable()
 export class ModuleNodeView implements IView {
     render(node: ModuleNode, context: RenderingContext): VNode {
         return <g class-sprotty-node={true} class-module={true} class-mouseover={node.hoverFeedback}>
@@ -68,6 +72,7 @@ export class ModuleNodeView implements IView {
     }
 }
 
+@injectable()
 export class ChoiceNodeView implements IView {
     render(model: OmlNode, context: RenderingContext): VNode {
         const width = Math.max(0, model.size.width * 0.5)
@@ -81,6 +86,7 @@ export class ChoiceNodeView implements IView {
     }
 }
 
+@injectable()
 export class CaseNodeView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node="{true}">
@@ -95,6 +101,7 @@ export class CaseNodeView implements IView {
     }
 }
 
+@injectable()
 export class UsesNodeView extends CaseNodeView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node={true}>
@@ -109,6 +116,7 @@ export class UsesNodeView extends CaseNodeView {
     }
 }
 
+@injectable()
 export class NoteView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         return <g class-note={true} class-mouseover={node.hoverFeedback}>
@@ -118,6 +126,7 @@ export class NoteView implements IView {
     }
 }
 
+@injectable()
 export class CompositionEdgeView extends PolylineEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
@@ -137,6 +146,7 @@ export class CompositionEdgeView extends PolylineEdgeView {
     }
 }
 
+@injectable()
 export class StandardEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
@@ -153,6 +163,7 @@ export class StandardEdgeView extends PolylineEdgeView {
     }
 }
 
+@injectable()
 export class DashedEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
@@ -167,6 +178,7 @@ export class DashedEdgeView extends PolylineEdgeView {
     }
 }
 
+@injectable()
 export class ImportEdgeView extends DashedEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
@@ -184,6 +196,7 @@ export class ImportEdgeView extends DashedEdgeView {
     }
 }
 
+@injectable()
 export class ArrowEdgeView extends StandardEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
@@ -201,6 +214,7 @@ export class ArrowEdgeView extends StandardEdgeView {
     }
 }
 
+@injectable()
 export class DashedArrowEdgeView extends DashedEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
@@ -218,6 +232,7 @@ export class DashedArrowEdgeView extends DashedEdgeView {
     }
 }
 
+@injectable()
 export class InvFunctionalView implements IView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         const vnode = <text class-sprotty-label={true}>{label.text}</text>;
@@ -228,6 +243,7 @@ export class InvFunctionalView implements IView {
     }
 }
 
+@injectable()
 export class CardinalLabelView extends SLabelView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         console.log("LABEL:", label);

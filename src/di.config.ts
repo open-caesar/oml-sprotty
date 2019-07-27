@@ -6,13 +6,14 @@
  */
 import { Container, ContainerModule } from "inversify";
 import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
-        HtmlRootView, LogLevel, PreRenderedElement,
-        PreRenderedView, SCompartment, SCompartmentView, SGraph,
-        SGraphView, SLabel, SLabelView, TYPES, boundsModule,
-        buttonModule, configureModelElement, defaultModule, expandModule,
-        exportModule, fadeModule, hoverModule, modelSourceModule, moveModule,
-        openModule, overrideViewerOptions, selectModule, undoRedoModule,
-        viewportModule, SButton, PolylineEdgeView } from 'sprotty/lib';
+    HtmlRootView, LogLevel, PolylineEdgeView, PreRenderedElement,
+    PreRenderedView, SCompartment, SCompartmentView, SGraph,
+    SGraphView, SLabel, SLabelView, TYPES, boundsModule,
+    buttonModule, configureModelElement, decorationModule, defaultModule,
+    edgeEditModule, edgeLayoutModule, expandModule,
+    exportModule, fadeModule, hoverModule, labelEditModule, modelSourceModule, moveModule,
+    openModule, overrideViewerOptions, routingModule, selectModule, updateModule, undoRedoModule,
+    viewportModule, SButton } from 'sprotty';
 // import { popupModelFactory } from "./popup";
 import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView, /*StandardEdgeView,*/
     CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
@@ -55,9 +56,12 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
 
 export default function createContainer(widgetId: string): Container {
     const container = new Container()
-    container.load(defaultModule, selectModule, moveModule, boundsModule, undoRedoModule, viewportModule,
+    container.load(
+        defaultModule, selectModule, moveModule, boundsModule, undoRedoModule, viewportModule,
         hoverModule, fadeModule, exportModule, expandModule, openModule, buttonModule, modelSourceModule,
-        omlDiagramModule)
+        decorationModule, edgeEditModule, edgeLayoutModule, labelEditModule, updateModule, routingModule,
+        omlDiagramModule
+    );
     //        container.bind(TYPES.ModelSource).to(TheiaDiagramServer).inSingletonScope()
     overrideViewerOptions(container, {
         needsClientLayout: true,
