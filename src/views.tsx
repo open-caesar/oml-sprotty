@@ -163,6 +163,20 @@ export class StandardEdgeView extends PolylineEdgeView {
     }
 }
 
+export class RelationshipEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y}`
+        return <path class-sprotty-edge={true} class-relationship={true} d={path}/>
+    }
+}
+
 @injectable()
 export class DashedEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
@@ -175,6 +189,20 @@ export class DashedEdgeView extends PolylineEdgeView {
         const lastPoint = segments[segments.length - 1];
         path += ` L ${lastPoint.x}, ${lastPoint.y > firstPoint.y ? lastPoint.y - 10 : lastPoint.y + 10}`
         return <path class-sprotty-edge={true} class-specializes={true} d={path}/>
+    }
+}
+
+export class RestrictsEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y}`
+        return <path class-sprotty-edge={true} class-restriction={true} d={path}/>
     }
 }
 
@@ -204,6 +232,42 @@ export class ArrowEdgeView extends StandardEdgeView {
         return [
             <polygon class-sprotty-edge={true} points="10,-4 0,0 10,4"
                   transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
+        ]
+    }
+
+    static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
+
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
+        return ArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+export class RelationshipArrowEdgeView extends RelationshipEdgeView {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
+        const p1 = segments[segments.length - 2]
+        const p2 = segments[segments.length - 1]
+        return [
+            <path class-sprotty-edge={true} class-relationship={true} d="M 10,-4 L 0,0 L 10,4"
+                transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`} />
+        ]
+    }
+
+    static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
+
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
+        return ArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+export class RestrictsArrowEdgeView extends RestrictsEdgeView {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
+        const p1 = segments[segments.length - 2]
+        const p2 = segments[segments.length - 1]
+        return [
+            <path class-sprotty-edge={true} class-restriction={true} d="M 10,-4 L 0,0 L 10,4"
+                transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`} />
+            // <polygon class-sprotty-edge={true} class-restriction={true} points="10,-4 0,0 10,4"
+            //       transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
 
@@ -248,6 +312,26 @@ export class CardinalLabelView extends SLabelView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         console.log("LABEL:", label);
         const vnode = <text class-sprotty-label={true} class-subtext={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+export class RestrictsLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true} class-restriction={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+export class RelationshipLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true} class-relationship={true}>{label.text}</text>;
         const subType = getSubType(label);
         if (subType)
             setAttr(vnode, 'class', subType);

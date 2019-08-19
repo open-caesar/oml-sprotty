@@ -7,8 +7,14 @@
 
 import {
     boundsFeature, fadeFeature, hoverFeedbackFeature, popupFeature, SCompartment, selectFeature, layoutContainerFeature,
-    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode, SEdge
+    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode, SEdge, SGraph
 } from "sprotty"
+
+export class OmlDiagram extends SGraph {
+    hasFeature(feature: symbol): boolean {
+        return feature === hoverFeedbackFeature || feature === popupFeature || super.hasFeature(feature)
+    }
+}
 
 export class OmlEdge extends SEdge {
     trace: String | undefined

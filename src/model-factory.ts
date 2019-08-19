@@ -1,5 +1,8 @@
-import { SGraphFactory, SModelElementSchema, SParentElement, SChildElement, getSubType, SEdge } from "sprotty";
+import { SGraphFactory, SModelElementSchema, SParentElement, SChildElement,
+    getSubType, SEdge, SLabel, EdgePlacement } from "sprotty";
+import { injectable } from "inversify";
 
+@injectable()
 export class OmlModelFactory extends SGraphFactory {
 
     readonly SQRT_5 = Math.sqrt(5)
@@ -23,5 +26,19 @@ export class OmlModelFactory extends SGraphFactory {
             }
         }
         return element
+    }
+
+    protected initializeChild(child: SChildElement, schema: SModelElementSchema, parent?: SParentElement): SChildElement {
+        super.initializeChild(child, schema, parent);
+        if (child instanceof SEdge) {
+            // child.routerKind = ManhattanEdgeRouter.KIND;
+            child.targetAnchorCorrection = Math.sqrt(5);
+        } else if (child instanceof SLabel) {
+            child.edgePlacement = <EdgePlacement> {
+                rotate: false,
+                position: 0.5
+            };
+        }
+        return child;
     }
 }

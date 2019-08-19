@@ -7,18 +7,18 @@
 import { Container, ContainerModule } from "inversify";
 import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
     HtmlRootView, LogLevel, PolylineEdgeView, PreRenderedElement,
-    PreRenderedView, SCompartment, SCompartmentView, SGraph,
+    PreRenderedView, SCompartment, SCompartmentView,
     SGraphView, SLabel, SLabelView, TYPES, boundsModule,
     buttonModule, configureModelElement, decorationModule, defaultModule,
     edgeEditModule, edgeLayoutModule, expandModule,
     exportModule, fadeModule, hoverModule, labelEditModule, modelSourceModule, moveModule,
     openModule, overrideViewerOptions, routingModule, selectModule, updateModule, undoRedoModule,
-    viewportModule, SButton } from 'sprotty';
+    viewportModule, SButton, SModelRoot } from 'sprotty';
 // import { popupModelFactory } from "./popup";
-import { ArrowEdgeView, CaseNodeView, ChoiceNodeView, ClassNodeView, /*StandardEdgeView,*/
-    CompositionEdgeView, DashedArrowEdgeView, DashedEdgeView, HeaderCompartmentView,
-    ImportEdgeView, ModuleNodeView, NoteView, TagView, UsesNodeView, CardinalLabelView } from "./views";
-import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge } from "./oml-models";
+import {CaseNodeView, ChoiceNodeView, ClassNodeView, CompositionEdgeView, DashedArrowEdgeView,
+    DashedEdgeView, HeaderCompartmentView, ImportEdgeView, ModuleNodeView, NoteView, TagView,
+    UsesNodeView, CardinalLabelView, RestrictsArrowEdgeView, RelationshipLabelView, RestrictsLabelView, RelationshipArrowEdgeView } from "./views";
+import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge, OmlDiagram } from "./oml-models";
 import { OmlModelFactory } from "./model-factory";
 
 const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
@@ -27,7 +27,7 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     rebind(TYPES.IModelFactory).to(OmlModelFactory).inSingletonScope()
     // bind(TYPES.PopupModelFactory).toConstantValue(popupModelFactory)
     const context = { bind, unbind, isBound, rebind };
-    configureModelElement(context, 'graph', SGraph, SGraphView);
+    configureModelElement(context, 'graph', OmlDiagram, SGraphView);
     configureModelElement(context, 'node:class', OmlNode, ClassNodeView)
     configureModelElement(context, 'node:module', ModuleNode, ModuleNodeView)
     configureModelElement(context, 'node:choice', OmlNode, ChoiceNodeView)
@@ -37,6 +37,8 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'label:heading', SLabel, SLabelView)
     configureModelElement(context, 'label:text', SLabel, SLabelView)
     configureModelElement(context, 'label:subtext', SLabel, CardinalLabelView)
+    configureModelElement(context, 'label:restricts', SLabel, RestrictsLabelView)
+    configureModelElement(context, 'label:relationship', SLabel, RelationshipLabelView)
     configureModelElement(context, 'ylabel:text', OmlLabel, SLabelView)
     configureModelElement(context, 'label:classHeader', SLabel, SLabelView)
     configureModelElement(context, 'tag', Tag, TagView)
@@ -48,7 +50,10 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'edge:dashed', OmlEdge, DashedEdgeView)
     configureModelElement(context, 'edge:import', OmlEdge, ImportEdgeView)
     configureModelElement(context, 'edge:uses', OmlEdge, DashedArrowEdgeView)
-    configureModelElement(context, 'edge:augments', OmlEdge, ArrowEdgeView)
+    configureModelElement(context, 'edge:augments', OmlEdge, RelationshipArrowEdgeView)
+    configureModelElement(context, 'edge:restricts', OmlEdge, RestrictsArrowEdgeView)
+    configureModelElement(context, 'edge:relationship', OmlEdge, RelationshipLabelView)
+    configureModelElement(context, 'palette', SModelRoot, HtmlRootView)
     configureModelElement(context, 'html', HtmlRoot, HtmlRootView)
     configureModelElement(context, 'pre-rendered', PreRenderedElement, PreRenderedView)
     configureModelElement(context, ExpandButtonHandler.TYPE, SButton, ExpandButtonView)
