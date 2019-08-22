@@ -8,6 +8,6 @@ import { injectable } from "inversify";
 @injectable()
 export class PaletteButtonView implements IView {
     render(button: SButton, context: RenderingContext): VNode {
-        return <div>{`INFO: ${button.id}`}</div>;
+        return <div>{button.id}</div>;
     }
 }
