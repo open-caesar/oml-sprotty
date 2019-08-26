@@ -15,8 +15,8 @@ import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
     openModule, overrideViewerOptions, routingModule, selectModule, updateModule, undoRedoModule,
     viewportModule, SButton, SModelRoot } from 'sprotty';
 // import { popupModelFactory } from "./popup";
-import {CaseNodeView, ChoiceNodeView, ClassNodeView, CompositionEdgeView, DashedArrowEdgeView,
-    DashedEdgeView, HeaderCompartmentView, ImportEdgeView, ModuleNodeView, NoteView, TagView,
+import {CaseNodeView, ChoiceNodeView, ClassNodeView, CompositionEdgeView, SpecializationArrowEdgeView,
+    SpecializationEdgeView, HeaderCompartmentView, ImportEdgeView, ModuleNodeView, NoteView, TagView,
     UsesNodeView, CardinalLabelView, RestrictsArrowEdgeView, RelationshipLabelView,
     RestrictsLabelView, RelationshipArrowEdgeView } from "./views";
 import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge, OmlDiagram, OmlEditableLabel } from "./oml-models";
@@ -49,9 +49,9 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'comp:classHeader', SCompartment, HeaderCompartmentView)
     configureModelElement(context, 'edge:straight', OmlEdge, PolylineEdgeView)
     configureModelElement(context, 'edge:composition', OmlEdge, CompositionEdgeView)
-    configureModelElement(context, 'edge:dashed', OmlEdge, DashedEdgeView)
+    configureModelElement(context, 'edge:dashed', OmlEdge, SpecializationEdgeView)
     configureModelElement(context, 'edge:import', OmlEdge, ImportEdgeView)
-    configureModelElement(context, 'edge:uses', OmlEdge, DashedArrowEdgeView)
+    configureModelElement(context, 'edge:uses', OmlEdge, SpecializationArrowEdgeView)
     configureModelElement(context, 'edge:augments', OmlEdge, RelationshipArrowEdgeView)
     configureModelElement(context, 'edge:restricts', OmlEdge, RestrictsArrowEdgeView)
     configureModelElement(context, 'edge:relationship', OmlEdge, RelationshipLabelView)

@@ -179,7 +179,7 @@ export class RelationshipEdgeView extends PolylineEdgeView {
 }
 
 @injectable()
-export class DashedEdgeView extends PolylineEdgeView {
+export class SpecializationEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
         let path = `M ${firstPoint.x},${firstPoint.y}`
@@ -209,7 +209,7 @@ export class RestrictsEdgeView extends PolylineEdgeView {
 }
 
 @injectable()
-export class ImportEdgeView extends DashedEdgeView {
+export class ImportEdgeView extends SpecializationEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
         const p2 = segments[1]
@@ -283,7 +283,7 @@ export class RestrictsArrowEdgeView extends RestrictsEdgeView {
 }
 
 @injectable()
-export class DashedArrowEdgeView extends DashedEdgeView {
+export class SpecializationArrowEdgeView extends SpecializationEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
@@ -296,7 +296,7 @@ export class DashedArrowEdgeView extends DashedEdgeView {
     static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
     protected getTargetAnchorCorrection(edge: OmlEdge): number {
-        return DashedArrowEdgeView.TARGET_CORRECTION
+        return SpecializationArrowEdgeView.TARGET_CORRECTION
     }
 }
 
