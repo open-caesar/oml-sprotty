@@ -13,3 +13,8 @@ text.relationship {
     fill: rgb(192, 190, 64);
     stroke: rgb(192, 190, 64);
 }
+
+text.editable {
+    fill: rgb(192, 190, 64);
+    stroke: rgb(192, 190, 64);
+}

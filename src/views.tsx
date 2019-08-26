@@ -163,6 +163,7 @@ export class StandardEdgeView extends PolylineEdgeView {
     }
 }
 
+@injectable()
 export class RelationshipEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
@@ -192,6 +193,7 @@ export class DashedEdgeView extends PolylineEdgeView {
     }
 }
 
+@injectable()
 export class RestrictsEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
@@ -242,6 +244,7 @@ export class ArrowEdgeView extends StandardEdgeView {
     }
 }
 
+@injectable()
 export class RelationshipArrowEdgeView extends RelationshipEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
@@ -259,6 +262,7 @@ export class RelationshipArrowEdgeView extends RelationshipEdgeView {
     }
 }
 
+@injectable()
 export class RestrictsArrowEdgeView extends RestrictsEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
@@ -319,6 +323,7 @@ export class CardinalLabelView extends SLabelView {
     }
 }
 
+@injectable()
 export class RestrictsLabelView extends SLabelView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         const vnode = <text class-sprotty-label={true} class-restriction={true}>{label.text}</text>;
@@ -329,6 +334,7 @@ export class RestrictsLabelView extends SLabelView {
     }
 }
 
+@injectable()
 export class RelationshipLabelView extends SLabelView {
     render(label: Readonly<SLabel>, context: RenderingContext): VNode {
         const vnode = <text class-sprotty-label={true} class-relationship={true}>{label.text}</text>;

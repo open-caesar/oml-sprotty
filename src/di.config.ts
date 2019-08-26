@@ -17,8 +17,9 @@ import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
 // import { popupModelFactory } from "./popup";
 import {CaseNodeView, ChoiceNodeView, ClassNodeView, CompositionEdgeView, DashedArrowEdgeView,
     DashedEdgeView, HeaderCompartmentView, ImportEdgeView, ModuleNodeView, NoteView, TagView,
-    UsesNodeView, CardinalLabelView, RestrictsArrowEdgeView, RelationshipLabelView, RestrictsLabelView, RelationshipArrowEdgeView } from "./views";
-import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge, OmlDiagram } from "./oml-models";
+    UsesNodeView, CardinalLabelView, RestrictsArrowEdgeView, RelationshipLabelView,
+    RestrictsLabelView, RelationshipArrowEdgeView } from "./views";
+import { ModuleNode, Tag, OmlLabel, OmlNode, OmlEdge, OmlDiagram, OmlEditableLabel } from "./oml-models";
 import { OmlModelFactory } from "./model-factory";
 
 const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
@@ -39,6 +40,7 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'label:subtext', SLabel, CardinalLabelView)
     configureModelElement(context, 'label:restricts', SLabel, RestrictsLabelView)
     configureModelElement(context, 'label:relationship', SLabel, RelationshipLabelView)
+    configureModelElement(context, 'label:editable', OmlEditableLabel, SLabelView)
     configureModelElement(context, 'ylabel:text', OmlLabel, SLabelView)
     configureModelElement(context, 'label:classHeader', SLabel, SLabelView)
     configureModelElement(context, 'tag', Tag, TagView)

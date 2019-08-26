@@ -7,7 +7,7 @@
 
 import {
     boundsFeature, fadeFeature, hoverFeedbackFeature, popupFeature, SCompartment, selectFeature, layoutContainerFeature,
-    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode, SEdge, SGraph
+    layoutableChildFeature, SLabel, SShapeElement, expandFeature, Expandable, openFeature, RectangularNode, SEdge, SGraph, EditableLabel, editLabelFeature
 } from "sprotty"
 
 export class OmlDiagram extends SGraph {
@@ -51,8 +51,14 @@ export class OmlHeaderNode extends SCompartment {
 export class OmlLabel extends SLabel {
     trace: string | undefined
 
-    hasFeature(feature: symbol) {
+    hasFeature(feature: symbol): boolean {
         return super.hasFeature(feature) || feature === selectFeature || (feature === openFeature && this.trace !== undefined)
+    }
+}
+
+export class OmlEditableLabel extends OmlLabel implements EditableLabel {
+    hasFeature(feature: symbol): boolean {
+        return feature === editLabelFeature || super.hasFeature(feature);
     }
 }
 
@@ -67,6 +73,7 @@ export class Tag extends SShapeElement {
     }
 
     hasFeature(feature: symbol): boolean {
-        return feature === boundsFeature || feature === layoutContainerFeature || feature === layoutableChildFeature || feature === fadeFeature
+        return feature === boundsFeature || feature === layoutContainerFeature
+            || feature === layoutableChildFeature || feature === fadeFeature
     }
 }
