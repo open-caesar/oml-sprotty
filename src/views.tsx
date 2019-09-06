@@ -7,17 +7,20 @@
 
 /** @jsx svg */
 import { svg } from 'snabbdom-jsx';
-
+import { injectable } from "inversify";
 import {
     RenderingContext,
     SCompartment,
     PolylineEdgeView,
     Point,
-    toDegrees, IView, setAttr
-} from "sprotty/lib"
+    toDegrees, IView, setAttr, SLabel,
+    getSubType,
+    SLabelView
+} from "sprotty"
 import { VNode } from "snabbdom/vnode"
 import { OmlNode, ModuleNode, OmlEdge, Tag } from "./oml-models"
 
+@injectable()
 export class ClassNodeView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node={true}>
@@ -31,6 +34,7 @@ export class ClassNodeView implements IView {
     }
 }
 
+@injectable()
 export class HeaderCompartmentView implements IView {
     render(model: SCompartment, context: RenderingContext): VNode {
         const translate = `translate(${model.bounds.x}, ${model.bounds.y})`
@@ -45,6 +49,7 @@ export class HeaderCompartmentView implements IView {
     }
 }
 
+@injectable()
 export class TagView implements IView {
     render(element: Tag, context: RenderingContext): VNode {
         const radius = 0.5 * element.size.width
@@ -55,6 +60,7 @@ export class TagView implements IView {
     }
 }
 
+@injectable()
 export class ModuleNodeView implements IView {
     render(node: ModuleNode, context: RenderingContext): VNode {
         return <g class-sprotty-node={true} class-module={true} class-mouseover={node.hoverFeedback}>
@@ -66,6 +72,7 @@ export class ModuleNodeView implements IView {
     }
 }
 
+@injectable()
 export class ChoiceNodeView implements IView {
     render(model: OmlNode, context: RenderingContext): VNode {
         const width = Math.max(0, model.size.width * 0.5)
@@ -79,6 +86,7 @@ export class ChoiceNodeView implements IView {
     }
 }
 
+@injectable()
 export class CaseNodeView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node="{true}">
@@ -93,6 +101,7 @@ export class CaseNodeView implements IView {
     }
 }
 
+@injectable()
 export class UsesNodeView extends CaseNodeView {
     render(node: OmlNode, context: RenderingContext): VNode {
         const vnode = <g class-sprotty-node={true}>
@@ -107,6 +116,7 @@ export class UsesNodeView extends CaseNodeView {
     }
 }
 
+@injectable()
 export class NoteView implements IView {
     render(node: OmlNode, context: RenderingContext): VNode {
         return <g class-note={true} class-mouseover={node.hoverFeedback}>
@@ -116,12 +126,13 @@ export class NoteView implements IView {
     }
 }
 
+@injectable()
 export class CompositionEdgeView extends PolylineEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
         const p2 = segments[1]
         const r = 6
-        const rhombStr = "M 0,0 l" + r + "," + (r / 2) + " l" + r + ",-" + (r / 2) + " l-" + r + ",-" + (r / 2) + " l-" + r + "," + (r / 2) + " Z"
+        const rhombStr = `M 0,0 l${r},${r / 2} l${r},-${r / 2} l-${r},-${r / 2} l-${r},${r / 2} Z`
         return [
             <path class-sprotty-edge={true} class-composition={true} d={rhombStr}
                   transform={`rotate(${angle(p1, p2)} ${p1.x} ${p1.y}) translate(${p1.x} ${p1.y})`}/>
@@ -135,19 +146,70 @@ export class CompositionEdgeView extends PolylineEdgeView {
     }
 }
 
-export class DashedEdgeView extends PolylineEdgeView {
+@injectable()
+export class StandardEdgeView extends PolylineEdgeView {
     protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
         const firstPoint = segments[0]
         let path = `M ${firstPoint.x},${firstPoint.y}`
-        for (let i = 1; i < segments.length; i++) {
+        for (let i = 1; i < segments.length - 1; i++) {
             const p = segments[i]
             path += ` L ${p.x},${p.y}`
         }
-        return <path class-sprotty-edge={true} class-dashed={true} d={path}/>
+        const secondLastPoint = segments[segments.length - 2];
+        const lastPoint = segments[segments.length - 1];
+        const isDownArrow = lastPoint.y > secondLastPoint.y
+        path += ` L ${lastPoint.x}, ${isDownArrow ? lastPoint.y - 10 : lastPoint.y + 10}`
+        return <path class-sprotty-edge={true} d={path}/>
     }
 }
 
-export class ImportEdgeView extends DashedEdgeView {
+@injectable()
+export class RelationshipEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y}`
+        return <path class-sprotty-edge={true} class-relationship={true} d={path}/>
+    }
+}
+
+@injectable()
+export class SpecializationEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y > firstPoint.y ? lastPoint.y - 10 : lastPoint.y + 10}`
+        return <path class-sprotty-edge={true} class-specializes={true} d={path}/>
+    }
+}
+
+@injectable()
+export class RestrictsEdgeView extends PolylineEdgeView {
+    protected renderLine(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode {
+        const firstPoint = segments[0]
+        let path = `M ${firstPoint.x},${firstPoint.y}`
+        for (let i = 1; i < segments.length - 1; i++) {
+            const p = segments[i]
+            path += ` L ${p.x},${p.y}`
+        }
+        const lastPoint = segments[segments.length - 1];
+        path += ` L ${lastPoint.x}, ${lastPoint.y}`
+        return <path class-sprotty-edge={true} class-restriction={true} d={path}/>
+    }
+}
+
+@injectable()
+export class ImportEdgeView extends SpecializationEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[0]
         const p2 = segments[1]
@@ -164,12 +226,13 @@ export class ImportEdgeView extends DashedEdgeView {
     }
 }
 
-export class ArrowEdgeView extends PolylineEdgeView {
+@injectable()
+export class ArrowEdgeView extends StandardEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
-            <path class-sprotty-edge={true} d="M 10,-4 L 0,0 L 10,4"
+            <polygon class-sprotty-edge={true} points="10,-4 0,0 10,4"
                   transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
@@ -181,12 +244,51 @@ export class ArrowEdgeView extends PolylineEdgeView {
     }
 }
 
-export class DashedArrowEdgeView extends DashedEdgeView {
+@injectable()
+export class RelationshipArrowEdgeView extends RelationshipEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
         const p1 = segments[segments.length - 2]
         const p2 = segments[segments.length - 1]
         return [
-            <path class-sprotty-edge={true} d="M 10,-4 L 0,0 L 10,4"
+            <path class-sprotty-edge={true} class-relationship={true} d="M 10,-4 L 0,0 L 10,4"
+                transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`} />
+        ]
+    }
+
+    static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
+
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
+        return ArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+@injectable()
+export class RestrictsArrowEdgeView extends RestrictsEdgeView {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
+        const p1 = segments[segments.length - 2]
+        const p2 = segments[segments.length - 1]
+        return [
+            <path class-sprotty-edge={true} class-restriction={true} d="M 10,-4 L 0,0 L 10,4"
+                transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`} />
+            // <polygon class-sprotty-edge={true} class-restriction={true} points="10,-4 0,0 10,4"
+            //       transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
+        ]
+    }
+
+    static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
+
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
+        return ArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+@injectable()
+export class SpecializationArrowEdgeView extends SpecializationEdgeView {
+    protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
+        const p1 = segments[segments.length - 2]
+        const p2 = segments[segments.length - 1]
+        return [
+            <polygon class-sprotty-edge={true} class-specializes={true} points="10,-4 0,0 10,4"
                   transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
@@ -194,7 +296,52 @@ export class DashedArrowEdgeView extends DashedEdgeView {
     static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
     protected getTargetAnchorCorrection(edge: OmlEdge): number {
-        return DashedArrowEdgeView.TARGET_CORRECTION
+        return SpecializationArrowEdgeView.TARGET_CORRECTION
+    }
+}
+
+@injectable()
+export class InvFunctionalView implements IView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+@injectable()
+export class CardinalLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        console.log("LABEL:", label);
+        const vnode = <text class-sprotty-label={true} class-subtext={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+@injectable()
+export class RestrictsLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true} class-restriction={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
+    }
+}
+
+@injectable()
+export class RelationshipLabelView extends SLabelView {
+    render(label: Readonly<SLabel>, context: RenderingContext): VNode {
+        const vnode = <text class-sprotty-label={true} class-relationship={true}>{label.text}</text>;
+        const subType = getSubType(label);
+        if (subType)
+            setAttr(vnode, 'class', subType);
+        return vnode;
     }
 }
 
