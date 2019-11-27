@@ -1,6 +1,6 @@
 {
   "name": "oml-sprotty",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "description": "sprotty diagrams for the Oml DSL",
   "author": "typefox.io",
   "license": "Apache-2.0",
