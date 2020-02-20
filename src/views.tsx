@@ -211,18 +211,18 @@ export class RestrictsEdgeView extends PolylineEdgeView {
 @injectable()
 export class ImportEdgeView extends SpecializationEdgeView {
     protected renderAdditionals(edge: OmlEdge, segments: Point[], context: RenderingContext): VNode[] {
-        const p1 = segments[0]
-        const p2 = segments[1]
+        const p1 = segments[segments.length - 2]
+        const p2 = segments[segments.length - 1]
         return [
             <path class-sprotty-edge={true} d="M 10,-4 L 0,0 L 10,4"
-                  transform={`rotate(${angle(p1, p2)} ${p1.x} ${p1.y}) translate(${p1.x} ${p1.y})`}/>
+                transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
 
-    static readonly SOURCE_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
+    static readonly TARGET_CORRECTION = Math.sqrt(1 * 1 + 2.5 * 2.5)
 
-    protected getSourceAnchorCorrection(edge: OmlEdge): number {
-        return CompositionEdgeView.SOURCE_CORRECTION
+    protected getTargetAnchorCorrection(edge: OmlEdge): number {
+        return ImportEdgeView.TARGET_CORRECTION
     }
 }
 
@@ -270,8 +270,6 @@ export class RestrictsArrowEdgeView extends RestrictsEdgeView {
         return [
             <path class-sprotty-edge={true} class-restriction={true} d="M 10,-4 L 0,0 L 10,4"
                 transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`} />
-            // <polygon class-sprotty-edge={true} class-restriction={true} points="10,-4 0,0 10,4"
-            //       transform={`rotate(${angle(p2, p1)} ${p2.x} ${p2.y}) translate(${p2.x} ${p2.y})`}/>
         ]
     }
 
