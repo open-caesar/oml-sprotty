@@ -4,16 +4,17 @@
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Container, ContainerModule } from "inversify";
-import { ConsoleLogger, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
+import { Container, ContainerModule } from "inversify"
+import 'sprotty/css/sprotty.css'
+import { ConsoleLogger, CreateElementCommand, ExpandButtonHandler, ExpandButtonView, HtmlRoot,
     HtmlRootView, LogLevel, PolylineEdgeView, PreRenderedElement,
-    PreRenderedView, SCompartment, SCompartmentView,
-    SGraphView, SLabel, SLabelView, TYPES, boundsModule,
-    buttonModule, configureModelElement, decorationModule, defaultModule,
+    PreRenderedView, SButton, SCompartment, SCompartmentView,
+    SGraphView, SLabel, SLabelView, SModelRoot, TYPES, boundsModule,
+    buttonModule, configureCommand, configureModelElement, decorationModule, defaultModule,
     edgeEditModule, edgeLayoutModule, expandModule,
     exportModule, fadeModule, hoverModule, labelEditModule, modelSourceModule, moveModule,
     openModule, overrideViewerOptions, routingModule, selectModule, updateModule, undoRedoModule,
-    viewportModule, SButton, SModelRoot } from 'sprotty';
+    viewportModule } from 'sprotty';
 // import { popupModelFactory } from "./popup";
 import {CaseNodeView, ChoiceNodeView, ClassNodeView, CompositionEdgeView, SpecializationArrowEdgeView,
     SpecializationEdgeView, HeaderCompartmentView, ImportEdgeView, ModuleNodeView, NoteView, TagView,
@@ -25,7 +26,8 @@ import { OmlModelFactory } from "./model-factory";
 const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => {
     rebind(TYPES.ILogger).to(ConsoleLogger).inSingletonScope()
     rebind(TYPES.LogLevel).toConstantValue(LogLevel.warn)
-    rebind(TYPES.IModelFactory).to(OmlModelFactory).inSingletonScope()
+    rebind(TYPES.IModelFactory).to(OmlModelFactory)
+
     // bind(TYPES.PopupModelFactory).toConstantValue(popupModelFactory)
     const context = { bind, unbind, isBound, rebind };
     configureModelElement(context, 'graph', OmlDiagram, SGraphView);
@@ -59,6 +61,8 @@ const omlDiagramModule = new ContainerModule((bind, unbind, isBound, rebind) => 
     configureModelElement(context, 'html', HtmlRoot, HtmlRootView)
     configureModelElement(context, 'pre-rendered', PreRenderedElement, PreRenderedView)
     configureModelElement(context, ExpandButtonHandler.TYPE, SButton, ExpandButtonView)
+
+    configureCommand(context, CreateElementCommand)
 })
 
 export default function createContainer(widgetId: string): Container {
@@ -68,7 +72,7 @@ export default function createContainer(widgetId: string): Container {
         hoverModule, fadeModule, exportModule, expandModule, openModule, buttonModule, modelSourceModule,
         decorationModule, edgeEditModule, edgeLayoutModule, labelEditModule, updateModule, routingModule,
         omlDiagramModule
-    );
+    )
     //        container.bind(TYPES.ModelSource).to(TheiaDiagramServer).inSingletonScope()
     overrideViewerOptions(container, {
         needsClientLayout: true,

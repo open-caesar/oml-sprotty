@@ -1,6 +1,6 @@
-import { SGraphFactory, SModelElementSchema, SParentElement, SChildElement,
-    getSubType, SEdge, SLabel, EdgePlacement } from "sprotty";
-import { injectable } from "inversify";
+import { injectable } from "inversify"
+import { EdgePlacement, ManhattanEdgeRouter, SGraphFactory, SModelElementSchema, SParentElement, SChildElement, SEdge, SLabel,
+    getSubType } from "sprotty"
 
 @injectable()
 export class OmlModelFactory extends SGraphFactory {
@@ -29,16 +29,16 @@ export class OmlModelFactory extends SGraphFactory {
     }
 
     protected initializeChild(child: SChildElement, schema: SModelElementSchema, parent?: SParentElement): SChildElement {
-        super.initializeChild(child, schema, parent);
+        super.initializeChild(child, schema, parent)
         if (child instanceof SEdge) {
-            // child.routerKind = ManhattanEdgeRouter.KIND;
-            child.targetAnchorCorrection = Math.sqrt(5);
+            child.routerKind = ManhattanEdgeRouter.KIND
+            child.targetAnchorCorrection = this.SQRT_5
         } else if (child instanceof SLabel) {
             child.edgePlacement = <EdgePlacement> {
                 rotate: false,
                 position: 0.5
             };
         }
-        return child;
+        return child
     }
 }

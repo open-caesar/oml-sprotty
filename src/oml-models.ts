@@ -26,7 +26,7 @@ export class OmlEdge extends SEdge {
 
 export class OmlNode extends RectangularNode {
     cssClass: string
-    trace: string | undefined
+    trace: string | undefined
     strokeWidth = 1
 
     hasFeature(feature: symbol): boolean {
@@ -49,7 +49,7 @@ export class OmlHeaderNode extends SCompartment {
 }
 
 export class OmlLabel extends SLabel {
-    trace: string | undefined
+    trace: string | undefined
 
     hasFeature(feature: symbol): boolean {
         return super.hasFeature(feature) || feature === selectFeature || (feature === openFeature && this.trace !== undefined)
