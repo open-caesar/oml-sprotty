@@ -28,4 +28,4 @@ export class OmlSprottyStarter extends SprottyLspEditStarter {
   }
 }
 
-// new OmlSprottyStarter();
+new OmlSprottyStarter();
