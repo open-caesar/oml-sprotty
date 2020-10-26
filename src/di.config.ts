@@ -79,6 +79,9 @@ import {
 } from "./oml-models";
 import { OmlModelFactory } from "./model-factory";
 
+import "../css/diagram.css";
+import "sprotty/css/sprotty.css";
+
 const omlDiagramModule = new ContainerModule(
   (bind, unbind, isBound, rebind) => {
     rebind(TYPES.ILogger).to(ConsoleLogger).inSingletonScope();
