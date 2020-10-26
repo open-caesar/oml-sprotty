@@ -1,6 +1,6 @@
 .sprotty-node {
     fill: var(--vscode-button-background);
-    stroke: #243f9a;
+    stroke: #243f8a;
 }
 .sprotty-node.module {
     fill: hsla(0, 4%, 32%, 0.5); 
