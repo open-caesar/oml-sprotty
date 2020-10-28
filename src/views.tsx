@@ -33,6 +33,8 @@ export class ClassNodeView implements IView {
           class-mouseover={node.hoverFeedback}
           x={0}
           y={0}
+          rx={10}
+          ry={10}
           width={Math.max(0, node.bounds.width)}
           height={Math.max(0, node.bounds.height)}
         />
@@ -57,6 +59,8 @@ export class HeaderCompartmentView implements IView {
           class-classHeader={true}
           x={0}
           y={0}
+          rx={10}
+          ry={10}
           width={width}
           height={height}
         ></rect>
@@ -94,8 +98,8 @@ export class ModuleNodeView implements IView {
           class-selected={node.selected}
           x={0}
           y={0}
-          rx="5"
-          ry="5"
+          rx="10"
+          ry="10"
           width={Math.max(0, node.bounds.width)}
           height={Math.max(0, node.bounds.height)}
         />
