@@ -2550,10 +2550,10 @@ sprotty-vscode-protocol@^0.0.5:
     path "^0.12.7"
     vscode-languageserver-protocol "^3.14.1"
 
-sprotty-vscode-webview@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/sprotty-vscode-webview/-/sprotty-vscode-webview-0.1.0.tgz#7a366804d9f823ddf26b675d4fe5a49b6a1ea8a7"
-  integrity sha512-k4hi9lOXDxH7R1W2lRy3Yjz8UIxIeXah2+3GlkLwo/sRT3CMfC+ug/EAIxtqKN8Ky9fV9EfbZDCIqYwMd5TKrA==
+sprotty-vscode-webview@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/sprotty-vscode-webview/-/sprotty-vscode-webview-0.1.2.tgz#ecac70be52a7d631f269c6444f12f6586ea58f1d"
+  integrity sha512-1fEi/ipyWGiTvT1Nm7H9n0f8w1N4/ZJ9+cblM5qFSMPWLdAQOajZQfBFa4nF4/ll6voa2m+b0BDSRwUP/CJteg==
   dependencies:
     reflect-metadata "^0.1.12"
     sprotty "0.9.0"
